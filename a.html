@@ -1,0 +1,43 @@
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+var siteUrl  = "https://osheenmusicco.sharepoint.com/sites/OsheenReg";
+var listName = "_userCheckout";
+var clientId  = "74b4c235-e31d-4b49-bd1c-dccc1b51b9b7";
+var clientSecret  = "cHLW1G/529MsWd/97ah0/k/V8uC81q0bk6L4z3nV778=";
+
+
+function getSharePointToken(callback) {
+      var tokenEndpoint = "https://accounts.accesscontrol.windows.net/86ba4f67-d4b7-4aed-a496-580c86ac8a67/tokens/OAuth/2";
+      
+      // Request parameters
+      var requestData = {
+        grant_type: "client_credentials",
+        client_id: clientId,
+        client_secret: clientSecret,
+        resource: siteUrl
+      };
+
+      // Make a POST request to obtain the SharePoint token
+      $.ajax({
+        url: tokenEndpoint,
+        method: "POST",
+        data: requestData,
+        success: function(response) {
+          var accessToken = response.access_token;
+          callback(accessToken);
+        },
+        error: function(error) {
+          console.log("Error obtaining SharePoint token: " + error);
+        }
+      });
+    }
+
+// Usage
+getSharePointToken(function(accessToken) {
+      console.log("SharePoint token: " + accessToken);
+      // Perform any further actions using the obtained token
+    });
+
+
+</script>
