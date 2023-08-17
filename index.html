@@ -1,59 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7AI.ONLINE</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  <style>
-    .bg-custom {
-      background-color: #00A67E;
-    }
-    .fullscreen-image {
-      background: url("Assets/Index/banner.jpg") no-repeat center center fixed;
-      background-size: cover;
-      background-position: center;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      text-align: center;
-    }
-  </style>
-</head>
-<body>
-
-  <header class="navbar navbar-expand-lg navbar-dark bg-custom">
-    <a class="navbar-brand" href="#">7AI</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </header>
-
-  <div class="fullscreen-image">    
-  </div>
-
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <!-- Bootstrap JS -->
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Sticky Notes</title>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+      <script src="https://statics.teams.microsoft.com/sdk/v1.11.0/js/MicrosoftTeams.min.js"></script>
+      <style>
+         body {
+         background-color: #f3f2f1;
+         }
+         .container {
+         margin-top: 40px;
+         }
+         .sticky-note {
+         border: 1px solid #e0e0e0;
+         padding: 15px;
+         margin-bottom: 20px;
+         border-radius: 5px;
+         background-color: #ffffff;
+         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+         font-size: 16px;
+         }
+         .sticky-note h4 {
+         margin-top: 0;
+         color: #6264a7;
+         }
+         #stickyForm {
+         background-color: #ffffff;
+         padding: 20px;
+         border-radius: 5px;
+         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+         }
+         #stickyForm label {
+         font-size: 18px;
+         font-weight: 500;
+         color: #6264a7;
+         }
+         #stickyForm button {
+         background-color: #6264a7;
+         border: none;
+         color: #ffffff;
+         font-size: 16px;
+         font-weight: 500;
+         padding: 10px 20px;
+         border-radius: 5px;
+         cursor: pointer;
+         }
+         #stickyForm button:hover {
+         background-color: #4e4f91;
+         }
+         .btnSticky {
+         color: #6264a7;
+         font-size: 1.7rem;
+         padding: 0px 5px;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="container">
+         <div class="row">
+            <div class="col-md-12">
+               <h3>Create a Sticky Note</h3>
+            </div>
+            <div class="col-md-12">
+               <form id="stickyForm">
+                  <div class="form-group">
+                     <label for="noteTitle">Title</label>
+                     <input type="text" class="form-control" id="noteTitle" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="noteContent">Content</label>
+                     <textarea class="form-control" id="noteContent" rows="3" required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Create Note</button>
+               </form>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-md-12">
+               <h3>Your Sticky Notes</h3>
+            </div>
+         </div>
+         <div id="stickyNotes" class="row">
+            <div class="col-md-6">
+               <div class="row" id="A"></div>
+            </div>
+            <div class="col-md-6">
+               <div class="row" id="B"></div>
+            </div>
+         </div>
+      </div>
+      <script>
+         document.addEventListener('DOMContentLoaded', function() {
+           const stickyForm = document.getElementById('stickyForm');
+         
+           function saveStickyNotesToLocalStorage() {
+             const notes = stickyNotes.innerHTML;
+             localStorage.setItem('stickyNotes', notes);
+           }
+         
+           function loadStickyNotesFromLocalStorage() {
+             const savedNotes = localStorage.getItem('stickyNotes');
+             if (savedNotes) {
+               stickyNotes.innerHTML = savedNotes;
+               attachDeleteHandlers();
+             }
+           }
+         
+           function attachDeleteHandlers() {
+             const deleteButtons = document.querySelectorAll('.delete-note');
+             deleteButtons.forEach(button => {
+               button.addEventListener('click', function() {
+                 const note = button.closest('.sticky-note');
+                 note.remove();
+                 saveStickyNotesToLocalStorage();
+               });
+             });
+           }
+         
+           function getStickyNotesRow(){
+             const stickyNotesRow = localStorage.getItem('stickyNotesRow');
+             let Ah = document.getElementById('A').offsetHeight;
+             let Bh = document.getElementById('B').offsetHeight;
+             if(Bh >= Ah|| stickyNotesRow == null){
+                 localStorage.setItem('stickyNotesRow', "A");
+                 return "A";
+             }              
+             else{
+                 localStorage.setItem('stickyNotesRow', "B");
+                 return "B";
+             }            
+           }
+         
+           stickyForm.addEventListener('submit', function(event) {
+         
+             event.preventDefault();
+         
+             const noteTitle = document.getElementById('noteTitle').value;
+             const noteContent = document.getElementById('noteContent').value;
+         
+             const stickyNotesRow = getStickyNotesRow();
+             const stickyNotesDOM = document.getElementById(stickyNotesRow);
+         
+             const note = document.createElement('div');
+             note.className = 'col-md-12';
+             note.innerHTML = `
+             <div class="sticky-note text-break">
+               <h4>${noteTitle}</h4>
+               <p>${noteContent}</p>
+               <button class="btn btnSticky btn-link delete-note" type="button">
+                 <span class="glyphicon glyphicon-trash"></span>
+               </button>
+               <button class="btn btnSticky btn-link copy-note" type="button">
+                 <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
+               </button>
+               <button class="btn btnSticky btn-link share-note" type="button">
+                 <span class="glyphicon glyphicon-share" aria-hidden="true"></span>
+               </button>
+             </div>
+             `;
+         
+             const copyButton = note.querySelector('.copy-note');
+             function copyToClipboard(text) {
+                 const textarea = document.createElement('textarea');
+                 textarea.value = text;
+                 document.body.appendChild(textarea);
+                 textarea.select();
+                 document.execCommand('copy');
+                 document.body.removeChild(textarea);
+             }
+             copyButton.addEventListener('click', function() {
+                 copyToClipboard(noteContent);
+             });
+         
+             stickyNotesDOM.appendChild(note);
+             saveStickyNotesToLocalStorage();
+             attachDeleteHandlers();
+             stickyForm.reset();
+           });
+           
+           loadStickyNotesFromLocalStorage();               
+         });
+      </script>
+      <script>
+         microsoftTeams.initialize(() => {
+            // Initialization succeeded
+            console.log("Teams SDK initialized");
+            // Add your Teams SDK code here
+        });                      
+      </script>
+   </body>
 </html>
