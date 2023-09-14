@@ -1,192 +1,318 @@
 <!DOCTYPE html>
-<html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Sticky Notes</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-      <script src="https://statics.teams.microsoft.com/sdk/v1.11.0/js/MicrosoftTeams.min.js"></script>
-      <style>
-         body {
-         background-color: #f3f2f1;
-         }
-         .container {
-         margin-top: 40px;
-         }
-         .sticky-note {
-         border: 1px solid #e0e0e0;
-         padding: 15px;
-         margin-bottom: 20px;
-         border-radius: 5px;
-         background-color: #ffffff;
-         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-         font-size: 16px;
-         }
-         .sticky-note h4 {
-         margin-top: 0;
-         color: #6264a7;
-         }
-         #stickyForm {
-         background-color: #ffffff;
-         padding: 20px;
-         border-radius: 5px;
-         box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-         }
-         #stickyForm label {
-         font-size: 18px;
-         font-weight: 500;
-         color: #6264a7;
-         }
-         #stickyForm button {
-         background-color: #6264a7;
-         border: none;
-         color: #ffffff;
-         font-size: 16px;
-         font-weight: 500;
-         padding: 10px 20px;
-         border-radius: 5px;
-         cursor: pointer;
-         }
-         #stickyForm button:hover {
-         background-color: #4e4f91;
-         }
-         .btnSticky {
-         color: #6264a7;
-         font-size: 1.7rem;
-         padding: 0px 5px;
-         }
-      </style>
-   </head>
-   <body>
-      <div class="container">
-         <div class="row">
-            <div class="col-md-12">
-               <h3>Create a Sticky Note</h3>
-            </div>
-            <div class="col-md-12">
-               <form id="stickyForm">
-                  <div class="form-group">
-                     <label for="noteTitle">Title</label>
-                     <input type="text" class="form-control" id="noteTitle" required>
-                  </div>
-                  <div class="form-group">
-                     <label for="noteContent">Content</label>
-                     <textarea class="form-control" id="noteContent" rows="3" required></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Create Note</button>
-               </form>
-            </div>
-         </div>
-         <div class="row">
-            <div class="col-md-12">
-               <h3>Your Sticky Notes</h3>
-            </div>
-         </div>
-         <div id="stickyNotes" class="row">
-            <div class="col-md-6">
-               <div class="row" id="A"></div>
-            </div>
-            <div class="col-md-6">
-               <div class="row" id="B"></div>
-            </div>
-         </div>
+<html>
+  <head>
+    <title>Sticky Notes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://statics.teams.microsoft.com/sdk/v1.11.0/js/MicrosoftTeams.min.js"></script>
+  </head>
+  <style>
+    body {
+      background-color: #f3f2f1;
+    }
+
+    .container {
+      margin-top: 40px;
+    }
+
+    .sticky-note {
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      background-color: #ffffff;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .sticky-note h4 {
+      margin-top: 0;
+      color: #6264a7;
+    }
+
+    .sticky-note p {
+      margin-top: 0;
+      color: #6264a7;
+    }
+
+    #stickyForm {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #stickyForm label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #6264a7;
+    }
+
+    #stickyForm button {
+      background-color: #6264a7;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #stickyMobileSync button {
+      background-color: #6264a7;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #stickyForm button:hover {
+      background-color: #4e4f91;
+    }
+
+    .btnSticky {
+      color: #6264a7;
+      font-size: 1.7rem;
+      padding: 0px 5px;
+    }
+  </style>
+  <script>
+    microsoftTeams.initialize(function() {
+      microsoftTeams.appInitialization.notifySuccess();
+    });
+  </script>
+  <body id="bodie">
+    <div class="container">
+      <div class="row justify-content-center" style="display: none;" id="stickyMobileSync">
+        <div class="col-8">
+          <button type="reset" onclick="syncDown()" class="btn btn-primary btn-block">Sync from Cloud</button>
+        </div>
       </div>
-      <script>
-         document.addEventListener('DOMContentLoaded', function() {
-           const stickyForm = document.getElementById('stickyForm');
-         
-           function saveStickyNotesToLocalStorage() {
-             const notes = stickyNotes.innerHTML;
-             localStorage.setItem('stickyNotes', notes);
-           }
-         
-           function loadStickyNotesFromLocalStorage() {
-             const savedNotes = localStorage.getItem('stickyNotes');
-             if (savedNotes) {
-               stickyNotes.innerHTML = savedNotes;
-               attachDeleteHandlers();
-             }
-           }
-         
-           function attachDeleteHandlers() {
-             const deleteButtons = document.querySelectorAll('.delete-note');
-             deleteButtons.forEach(button => {
-               button.addEventListener('click', function() {
-                 const note = button.closest('.sticky-note');
-                 note.remove();
-                 saveStickyNotesToLocalStorage();
-               });
-             });
-           }
-         
-           function getStickyNotesRow(){
-             const stickyNotesRow = localStorage.getItem('stickyNotesRow');
-             let Ah = document.getElementById('A').offsetHeight;
-             let Bh = document.getElementById('B').offsetHeight;
-             if(Bh >= Ah|| stickyNotesRow == null){
-                 localStorage.setItem('stickyNotesRow', "A");
-                 return "A";
-             }              
-             else{
-                 localStorage.setItem('stickyNotesRow', "B");
-                 return "B";
-             }            
-           }
-         
-           stickyForm.addEventListener('submit', function(event) {
-         
-             event.preventDefault();
-         
-             const noteTitle = document.getElementById('noteTitle').value;
-             const noteContent = document.getElementById('noteContent').value;
-         
-             const stickyNotesRow = getStickyNotesRow();
-             const stickyNotesDOM = document.getElementById(stickyNotesRow);
-         
-             const note = document.createElement('div');
-             note.className = 'col-md-12';
-             note.innerHTML = `
-             <div class="sticky-note text-break">
-               <h4>${noteTitle}</h4>
-               <p>${noteContent}</p>
-               <button class="btn btnSticky btn-link delete-note" type="button">
-                 <span class="glyphicon glyphicon-trash"></span>
-               </button>
-               <button class="btn btnSticky btn-link copy-note" type="button">
-                 <span class="glyphicon glyphicon-copy" aria-hidden="true"></span>
-               </button>              
-             </div>
-             `;
-         
-             const copyButton = note.querySelector('.copy-note');
-             function copyToClipboard(text) {
-                 const textarea = document.createElement('textarea');
-                 textarea.value = text;
-                 document.body.appendChild(textarea);
-                 textarea.select();
-                 document.execCommand('copy');
-                 document.body.removeChild(textarea);
-             }
-             copyButton.addEventListener('click', function() {
-                 copyToClipboard(noteContent);
-             });
-         
-             stickyNotesDOM.appendChild(note);
-             saveStickyNotesToLocalStorage();
-             attachDeleteHandlers();
-             stickyForm.reset();
-           });
-           
-           loadStickyNotesFromLocalStorage();               
-         });
-      </script>
-      <script>
-         microsoftTeams.initialize(() => {
-            // Initialization succeeded
-            console.log("Teams SDK initialized");
-            // Add your Teams SDK code here
-        });                      
-      </script>
-   </body>
+      <div class="row" style="display: none;" id="stickyFormTitle">
+        <div class="col-xs-12">
+          <div style="padding: 2px; border: 0px 0px 1px 0px solid #303030;">
+            <h2 style="font-size: 24px;">Hello <span id="username"></span>, create <b><span id="typewriter"></span></b>
+            </h2>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="display: none;" id="stickyFormParent">
+        <div class="col-md-12">
+          <form id="stickyForm">
+            <div class="form-group">
+              <label for="noteTitle">Title</label>
+              <input type="text" class="form-control" id="noteTitle" required>
+            </div>
+            <div class="form-group">
+              <label for="noteContent">Content</label>
+              <textarea class="form-control" id="noteContent" rows="3" required></textarea>
+            </div>
+            <div class="d-flex justify-content-between" role="toolbar">
+              <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-primary">Create Note</button>
+              </div>
+              <div class="btn-group">
+                <button type="reset" onclick="syncDown()" class="btn btn-primary">Sync from Cloud</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="stickyNotes" class="row" style="padding: 4px; margin-top: 22px;">
+        <div class="col-md-6">
+          <div class="row" id="A"></div>
+        </div>
+        <div class="col-md-6">
+          <div class="row" id="B"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <!--HELPER FUNCTIONS-->
+  <script>
+    function heroText() {
+      const a = ["Sticky Notes", "Reminders", "Work Items", "To-Do Lists", "Memorable Events", "Personal Journals", "Custom Recipes", "Budget Plans", "Music Playlists", "Fitness Goals", "Study Guides", "Contact Lists", "DIY Projects", "Personal Resumes", "Calendars", "Party Invitations", "Custom Cards"];
+      const r = Math.floor(Math.random() * a.length);
+      return a[r]
+    }
+
+    function heroColor() {
+      const f = ["#FF5733", "#33FF57", "#5733FF", "#FF3399", "#99FF33", "#3399FF", "#FF3366", "#66FF33", "#3366FF", "#FF6633", "#33FF99", "#9933FF", "#FF9933", "#33FF66", "#66FF99", "#CC33FF", "#FF33CC", "#33CCFF", "#FFCC33", "#33FFCC"];
+      const r = Math.floor(Math.random() * f.length);
+      return f[r]
+    }
+    $(document).ready(function() {
+      let t = heroText() + "!",
+        c = heroColor(),
+        d = 50;
+
+      function e(n) {
+        if (n < t.length) {
+          $('#typewriter').append(`<span style="color:${c}"><u>${t[n]}</u></span>`);
+          setTimeout(function() {
+            e(n + 1)
+          }, d)
+        } else setTimeout(function() {
+          $('#typewriter').text('');
+          c = heroColor();
+          t = heroText() + "!";
+          setTimeout(function() {
+            e(0)
+          }, d)
+        }, 1500)
+      }
+      e(0)
+    });
+
+    function getStickyNotesRow() {
+      const stickyNotesRow = localStorage.getItem('stickyNotesRow');
+      let Ah = document.getElementById('A').offsetHeight;
+      let Bh = document.getElementById('B').offsetHeight;
+      return Ah <= Bh ? 'A' : 'B';
+    }
+  </script>
+  <!--TEAMS CONTEXT-->
+  <script>
+    var userObjectId = null;
+    var device = null;
+    microsoftTeams.getContext(function(context) {
+      // You can access user context properties like this:
+      userObjectId = context.userObjectId;
+      device = context.hostClientType;
+      var userPrincipalName = context.userPrincipalName;
+      if (userPrincipalName.includes('@')) {
+        var userPrincipalName = userPrincipalName.split('@')[0];
+      }
+      $("#username").text(userPrincipalName);
+      if (context.theme === 'dark') {
+        $('#bodie').css({
+          'color': '#FFFFFF',
+          'background-color': '#1f1f1f'
+        });
+      } else {
+        $('#bodie').css({
+          'color': '#000000',
+          'background-color': '#f3f2f1'
+        });
+      }
+      //alert(userObjectId)
+      //console.log("User Principal Name: " + userPrincipalName);
+      //console.log(context.hostClientType);
+      syncDown();
+      if (device != "ios" && device != "android") {
+        $("#stickyFormParent").show();
+        $("#stickyFormTitle").show();
+      } else {
+        $("#stickyMobileSync").show();
+      }
+    });
+  </script>
+  <!--CORE LOGIC-->
+  <script>
+    const stickyForm = document.getElementById('stickyForm');
+    const stickyNotes = document.getElementById('stickyNotes');
+    const stickDBLocal = "13ky"
+
+    function saveStickyNotesToLocalStorage() {
+      const notes = stickyNotes.innerHTML;
+      localStorage.setItem(stickDBLocal, notes);
+      syncUp();
+    }
+
+    function loadStickyNotesFromLocalStorage() {
+      const savedNotes = localStorage.getItem(stickDBLocal);
+      if (savedNotes) {
+        stickyNotes.innerHTML = savedNotes;
+      }
+      attachDeleteHandlers();
+    }
+
+    function attachDeleteHandlers() {
+      const deleteButtons = document.querySelectorAll('.delete-note');
+      deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const note = button.closest('.col-md-12');
+          note.remove();
+          saveStickyNotesToLocalStorage();
+        });
+      });
+      if (device != "ios" && device != "android") {} else {
+        $('.delete-note').hide();
+      }
+    }
+    
+    stickyForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const noteTitle = document.getElementById('noteTitle').value;
+      const noteContent = document.getElementById('noteContent').value;
+      const stickyNotesDOM = document.getElementById(getStickyNotesRow());
+      const note = document.createElement('div');
+      note.className = 'col-md-12';
+      note.innerHTML = `
+						<div class="sticky-note text-break">
+							<h4>${noteTitle}</h4>
+							<p>${noteContent}</p>
+							<button class="btn btnSticky btn-link delete-note" type="button">
+								<span class="glyphicon glyphicon-trash"></span>
+							</button>
+						</div>`;
+      stickyNotesDOM.appendChild(note);
+      saveStickyNotesToLocalStorage();
+      attachDeleteHandlers();
+      stickyForm.reset();
+    });
+    
+    loadStickyNotesFromLocalStorage();
+
+    function syncUp() {
+      if (userObjectId === null) {
+        return;
+      }
+      const up = "https://prod-06.eastus.logic.azure.com:443/workflows/97e6fb743399457396a6a1db7b2faaeb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=asjX2BLrb0RKVvEwmxoD-Pky8R3Eew3BIS1SZnIwrq8";
+      let jsonData = {
+        "id": userObjectId,
+        "data": localStorage.getItem(stickDBLocal)
+      }
+      $.ajax({
+        type: "POST",
+        url: up,
+        data: JSON.stringify(jsonData),
+        contentType: "application/json",
+        success: function(response) {
+          // Handle the response from the API
+          //console.log(response);            
+        },
+        error: function(jqXHR, textStatus, errorThrown) {}
+      });
+    }
+
+    function syncDown() {
+      if (userObjectId === null) {
+        return;
+      }
+      var jsonData1 = {
+        "id": userObjectId
+      }
+      const down = "https://prod-22.eastus.logic.azure.com:443/workflows/ed4144bc58564450a1375714b29419b5/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=YjF4hjy7MvDO2YXrzT7QJVdcLWu_c2kgdPGwDepKXPE"
+      $.ajax({
+        url: down, // Replace with your API endpoint
+        type: 'POST',
+        data: JSON.stringify(jsonData1),
+        contentType: "application/json",
+        success: function(response) {
+          if (response.Data) {
+            const stickyNotes1 = document.getElementById('stickyNotes');
+            stickyNotes1.innerHTML = response.Data;
+            attachDeleteHandlers();
+          }
+        },
+        error: function(error) {}
+      });
+    }
+  </script>
 </html>
