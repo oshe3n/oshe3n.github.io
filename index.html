@@ -304,6 +304,7 @@
             const stickyNotes1 = document.getElementById('stickyNotes');
             stickyNotes1.innerHTML = response.Data;
             attachDeleteHandlers();
+	    localStorage.setItem(stickDBLocal, response.Data);
           }
         },
         error: function(error) {}
