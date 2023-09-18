@@ -96,6 +96,7 @@
   <body id="bodie">
     <div class="container">
       <div class="row notification" id="overlayNotification">SYNCING NOTES ACROSS DEVICES</div>
+      <div class="row notification" id="overlayNotification2">NOTE ADDED</div>
       <div class="row justify-content-center" style="display: none;" id="stickyMobileSync">
         <div class="col-8">
           <button type="reset" onclick="SyncButton()" class="btn btn-primary btn-block">Sync Notes</button>
@@ -273,6 +274,10 @@
       saveStickyNotesToLocalStorage();
       attachDeleteHandlers();
       stickyForm.reset();
+      $("#overlayNotification2").fadeIn();
+      setTimeout(function() {
+         $("#overlayNotification2").fadeOut();
+      }, 3000);
     });
     
     loadStickyNotesFromLocalStorage();
