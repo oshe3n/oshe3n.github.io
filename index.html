@@ -31,11 +31,6 @@
       color: #6264a7;
     }
 
-    .sticky-note p {
-      margin-top: 0;
-      color: #6264a7;
-    }
-
     #stickyForm {
       background-color: #ffffff;
       padding: 20px;
@@ -254,7 +249,7 @@
       const note = document.createElement('div');
       note.className = 'col-md-12';
       note.innerHTML = `
-						<div class="sticky-note text-break">
+						<div class="sticky-note text-break" style="color: #6264a7;">
 							<h4>${noteTitle}</h4>
 							<p>${noteContent}</p>
 							<button class="btn btnSticky btn-link delete-note" type="button">
