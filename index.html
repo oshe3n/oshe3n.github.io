@@ -75,6 +75,18 @@
       font-size: 1.7rem;
       padding: 0px 5px;
     }
+
+    .notification {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #4e4f91;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      display: none; /* Initially hide the notification */
+    }
   </style>
   <script>
     microsoftTeams.initialize(function() {
@@ -83,9 +95,10 @@
   </script>
   <body id="bodie">
     <div class="container">
+      <div class="row notification" id="overlayNotification">SYNCING NOTES FROM OTHER DEVICES</div>
       <div class="row justify-content-center" style="display: none;" id="stickyMobileSync">
         <div class="col-8">
-          <button type="reset" onclick="syncDown()" class="btn btn-primary btn-block">Sync Across Devices</button>
+          <button type="reset" onclick="SyncButton()" class="btn btn-primary btn-block">Sync</button>
         </div>
       </div>
       <div class="row" style="display: none;" id="stickyFormTitle">
@@ -112,7 +125,7 @@
                 <button type="submit" class="btn btn-primary">Create Note</button>
               </div>
               <div class="btn-group">
-                <button type="reset" onclick="syncDown()" class="btn btn-primary">Sync Across Devices</button>
+                <button type="reset" onclick="SyncButton()" class="btn btn-primary">Sync</button>
               </div>
             </div>
           </form>
@@ -286,6 +299,14 @@
       });
     }
 
+    function SyncButton(){
+        $("#overlayNotification").fadeIn();
+        syncDown()
+        setTimeout(function() {
+            $("#overlayNotification").fadeOut();
+        }, 3000);
+    }
+	  
     function syncDown() {
       if (userObjectId === null) {
         return;
