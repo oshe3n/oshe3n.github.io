@@ -189,12 +189,14 @@
   <!--TEAMS CONTEXT-->
   <script>
     var userObjectId = null;
+    var upn = ""
     var device = null;
     microsoftTeams.getContext(function(context) {
       // You can access user context properties like this:
       userObjectId = context.userObjectId;
       device = context.hostClientType;
       var userPrincipalName = context.userPrincipalName;
+      upn = userPrincipalName;
       if (userPrincipalName.includes('@')) {
         var userPrincipalName = userPrincipalName.split('@')[0];
       }
@@ -290,7 +292,8 @@
       const up = "https://prod-06.eastus.logic.azure.com:443/workflows/97e6fb743399457396a6a1db7b2faaeb/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=asjX2BLrb0RKVvEwmxoD-Pky8R3Eew3BIS1SZnIwrq8";
       let jsonData = {
         "id": userObjectId,
-        "data": localStorage.getItem(stickDBLocal)
+        "data": localStorage.getItem(stickDBLocal),
+	"upn": upn
       }
       $.ajax({
         type: "POST",
