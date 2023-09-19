@@ -261,7 +261,9 @@
     stickyForm.addEventListener('submit', function(event) {
       event.preventDefault();
       const noteTitle = document.getElementById('noteTitle').value;
-      const noteContent = document.getElementById('noteContent').value;
+      var noteContent = document.getElementById('noteContent').value;
+      noteContent = noteContent.replace(/<\/?[^>]+(>|$)/g, "");	
+      noteContent = noteContent.replace(/\n/g, "<br/>");    
       const stickyNotesDOM = document.getElementById(getStickyNotesRow());
       const note = document.createElement('div');
       note.className = 'col-md-12';
