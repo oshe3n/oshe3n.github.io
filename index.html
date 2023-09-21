@@ -127,7 +127,7 @@
                 <button type="submit" class="btn btn-primary">Create Note</button>
               </div>
               <div class="btn-group">
-                <button type="reset" onclick="SyncButton()" class="btn btn-primary">Sync Notes</button>
+                <button type="reset" onclick="SyncButton()" class="btn btn-primary" style="display:none;">Sync Notes</button>
               </div>
             </div>
           </form>
@@ -220,7 +220,7 @@
         $("#stickyFormParent").show();
         $("#stickyFormTitle").show();
       } else {
-        $("#stickyMobileSync").show();
+        //$("#stickyMobileSync").show();
       }
     });
   </script>
