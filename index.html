@@ -338,7 +338,7 @@
 	    localStorage.setItem(stickDBLocal, response.Data);
           }
         },
-        error: function(error) {}
+        error: function(error) {syncUp();}
       });
     }
   </script>
