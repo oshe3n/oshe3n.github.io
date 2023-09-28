@@ -139,6 +139,17 @@
       let Bh = document.getElementById('B').offsetHeight;
       return Ah <= Bh ? 'A' : 'B';
     }
+    $(document).ready(function () {
+    // Get the textarea element using jQuery
+    var $textarea = $("#noteContent");
+
+    // Add an input event listener
+    $textarea.on("input", function () {
+        var minRows = 3;
+        var rows = minRows + ($textarea[0].scrollHeight - $textarea[0].clientHeight) / 20;
+        $textarea.attr("rows", rows);
+      });
+    });
   </script>
   <!--TEAMS CONTEXT-->
   <script>
