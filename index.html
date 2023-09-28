@@ -103,14 +103,6 @@
           <button type="reset" onclick="SyncButton()" class="btn btn-primary btn-block">Sync Notes</button>
         </div>
       </div>
-      <div class="row" style="display: none;" id="stickyFormTitle">
-        <div class="col-xs-12">
-          <div style="padding: 2px; border: 0px 0px 1px 0px solid #303030;">
-            <h2 style="font-size: 24px;">Hello <span id="username"></span>, create <b><span id="typewriter"></span></b>
-            </h2>
-          </div>
-        </div>
-      </div>
       <div class="row" style="display: none;" id="stickyFormParent">
         <div class="col-md-12">
           <form id="stickyForm">
@@ -145,40 +137,6 @@
   </body>
   <!--HELPER FUNCTIONS-->
   <script>
-    function heroText() {
-      const a = ["Sticky Notes", "Reminders", "Work Items", "To-Do Lists", "Memorable Events", "Personal Journals", "Custom Recipes", "Budget Plans", "Music Playlists", "Fitness Goals", "Study Guides", "Contact Lists", "DIY Projects", "Personal Resumes", "Calendars", "Party Invitations", "Custom Cards"];
-      const r = Math.floor(Math.random() * a.length);
-      return a[r]
-    }
-
-    function heroColor() {
-      const f = ["#FF5733", "#33FF57", "#5733FF", "#FF3399", "#99FF33", "#3399FF", "#FF3366", "#66FF33", "#3366FF", "#FF6633", "#33FF99", "#9933FF", "#FF9933", "#33FF66", "#66FF99", "#CC33FF", "#FF33CC", "#33CCFF", "#FFCC33", "#33FFCC"];
-      const r = Math.floor(Math.random() * f.length);
-      return f[r]
-    }
-    $(document).ready(function() {
-      let t = heroText() + "!",
-        c = heroColor(),
-        d = 50;
-
-      function e(n) {
-        if (n < t.length) {
-          $('#typewriter').append(`<span style="color:${c}">${t[n]}</span>`);
-          setTimeout(function() {
-            e(n + 1)
-          }, d)
-        } else setTimeout(function() {
-          $('#typewriter').text('');
-          c = heroColor();
-          t = heroText() + "!";
-          setTimeout(function() {
-            e(0)
-          }, d)
-        }, 1500)
-      }
-      e(0)
-    });
-
     function getStickyNotesRow() {
       const stickyNotesRow = localStorage.getItem('stickyNotesRow');
       let Ah = document.getElementById('A').offsetHeight;
@@ -218,8 +176,8 @@
       syncDown();
       if (device != "ios" && device != "android") {
         $("#stickyFormParent").show();
-        $("#stickyFormTitle").show();
       } else {
+	$("#stickyFormParent").show();
         //$("#stickyMobileSync").show();
       }
     });
