@@ -206,9 +206,11 @@
             if (theme === 'dark' ) {
                 $('.sticky-note').css({
                 'background-color': '#333',
-                'color': '#fff',
                 'border-color': '#555'
                 });
+                var $stickyNote1 = $(".sticky-note");
+                $stickyNote1.find("h3").css("color", "#FFFFFF");
+                $stickyNote1.find("p").css("color", "#FFFFFF");
                 $('#stickyForm').css({
                 'background-color': '#333',
                 'color': '#fff',
@@ -228,9 +230,11 @@
             else {
                 $('.sticky-note').css({
                 'background-color': '#ffffff',
-                'color': '#000000',
                 'border-color': '#e0e0e0'
                 });
+                var $stickyNote2 = $(".sticky-note");
+                $stickyNote2.find("h3").css("color", "#000000");
+                $stickyNote2.find("p").css("color", "#000000");
             }
         }
         
