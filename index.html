@@ -115,18 +115,17 @@
           return Ah <= Bh ? 'A' : 'B';
         }
 
-        $(document).ready(function () {
-          var $textarea = $("#noteContent");
+        document.addEventListener("DOMContentLoaded", function () {
+          var textarea = document.getElementById("noteContent");
           function updateTextareaRows() {
             var minRows = 3;
-            var maxRows = Math.floor(($(window).height() - $textarea.offset().top - 20) / parseFloat($textarea.css("line-height")));
-            var contentRows = Math.floor($textarea[0].scrollHeight / parseFloat($textarea.css("line-height")));
+            var maxRows = Math.floor((window.innerHeight - textarea.getBoundingClientRect().top - 20) / parseFloat(getComputedStyle(textarea).lineHeight));
+            var contentRows = Math.floor(textarea.scrollHeight / parseFloat(getComputedStyle(textarea).lineHeight));
             var rows = Math.max(minRows, Math.min(maxRows, contentRows));
-            $textarea.attr("rows", rows);
+            textarea.rows = rows;
           }
           updateTextareaRows();
-          $textarea.on("input", updateTextareaRows);
-          $(window).on("resize", updateTextareaRows);
+          textarea.addEventListener("input", updateTextareaRows);
         });
 </script>
 <!--TEAMS CONTEXT-->
