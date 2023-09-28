@@ -227,15 +227,15 @@
                 'color': '#fff',
                 'border-color': '#555'
                 });
-                $('.container').show();
             }
             else {
                 $('.sticky-note').css({
                 'background-color': '#ffffff',
-                'color': '#6264a7',
                 'border-color': '#e0e0e0'
                 });
-                $('.container').show();
+                var $stickyNot3e = $(".sticky-note");
+                $stickyNot3e.find("h3").css("color", "#6264a7");
+                $stickyNot3e.find("p").css("color", "#000000");
             }
         }
         
