@@ -98,7 +98,6 @@
     <div class="container">
       <div class="row notification" id="overlayNotification">SYNCING NOTES ACROSS DEVICES</div>
       <div class="row notification" id="overlayNotification2">NOTE ADDED</div>
-      <div class="row justify-content-center" style="display: none;" id="stickyMobileSync">
         <div class="col-8">
           <button type="reset" onclick="SyncButton()" class="btn btn-primary btn-block">Sync Notes</button>
         </div>
@@ -178,7 +177,6 @@
         $("#stickyFormParent").show();
       } else {
 	$("#stickyFormParent").show();
-        //$("#stickyMobileSync").show();
       }
     });
   </script>
@@ -211,8 +209,10 @@
           saveStickyNotesToLocalStorage();
         });
       });
-      if (device != "ios" && device != "android") {} else {
-        $('.delete-note').hide();
+      if (device != "ios" && device != "android") {
+	$('.delete-note').show();
+      } else {
+        $('.delete-note').show();
       }
     }
     
