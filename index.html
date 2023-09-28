@@ -130,16 +130,19 @@
           let Bh = document.getElementById('B').offsetHeight;
           return Ah <= Bh ? 'A' : 'B';
         }
+
         $(document).ready(function () {
-        // Get the textarea element using jQuery
-        var $textarea = $("#noteContent");
-        
-        // Add an input event listener
-        $textarea.on("input", function () {
+          var $textarea = $("#noteContent");
+          function updateTextareaRows() {
             var minRows = 3;
-            var rows = minRows + ($textarea[0].scrollHeight - $textarea[0].clientHeight) / 20;
+            var maxRows = Math.floor(($(window).height() - $textarea.offset().top - 20) / parseFloat($textarea.css("line-height")));
+            var contentRows = Math.floor($textarea[0].scrollHeight / parseFloat($textarea.css("line-height")));
+            var rows = Math.max(minRows, Math.min(maxRows, contentRows));
             $textarea.attr("rows", rows);
-          });
+          }
+          updateTextareaRows();
+          $textarea.on("input", updateTextareaRows);
+          $(window).on("resize", updateTextareaRows);
         });
 </script>
 <!--TEAMS CONTEXT-->
@@ -232,6 +235,7 @@
         							</button>
         						</div>`;
           stickyNotesDOM.appendChild(note);
+          $("#noteContent").attr("rows", 3);
           saveStickyNotesToLocalStorage();
           attachDeleteHandlers();
           stickyForm.reset();
