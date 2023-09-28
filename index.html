@@ -27,11 +27,6 @@
           font-size: 16px;
         }
         
-        .sticky-note h4 {
-          margin-top: 0;
-          color: #6264a7;
-        }
-        
         #stickyForm {
           background-color: #ffffff;
           padding: 20px;
@@ -56,16 +51,6 @@
           cursor: pointer;
         }
         
-        #stickyMobileSync button {
-          background-color: #6264a7;
-          border: none;
-          color: #ffffff;
-          font-size: 16px;
-          font-weight: 500;
-          padding: 10px 20px;
-          border-radius: 5px;
-          cursor: pointer;
-        }
         
         #stickyForm button:hover {
           background-color: #4e4f91;
@@ -100,7 +85,7 @@
         <div class="container">
                 <div class="row notification" id="overlayNotification">SYNCING NOTES ACROSS DEVICES</div>
                 <div class="row notification" id="overlayNotification2">NOTE ADDED</div>
-                <div class="row" style="display: none;" id="stickyFormParent">
+                <div class="row" id="stickyFormParent">
                         <div class="col-md-12">
                                 <form id="stickyForm">
                                         <div class="form-group"> <label for="noteTitle">Title</label> <input type="text" class="form-control" id="noteTitle" required> </div>
@@ -150,12 +135,14 @@
         var userObjectId = null;
         var upn = ""
         var device = null;
+        var theme = "dark"
         microsoftTeams.getContext(function(context) {
           // You can access user context properties like this:
           userObjectId = context.userObjectId;
           device = context.hostClientType;
           var userPrincipalName = context.userPrincipalName;
           upn = userPrincipalName;
+          theme = context.theme;
           if (userPrincipalName.includes('@')) {
             var userPrincipalName = userPrincipalName.split('@')[0];
           }
@@ -175,11 +162,6 @@
           //console.log("User Principal Name: " + userPrincipalName);
           //console.log(context.hostClientType);
           syncDown();
-          if (device != "ios" && device != "android") {
-            $("#stickyFormParent").show();
-          } else {
-        	$("#stickyFormParent").show();
-          }
         });
 </script>
 <!--CORE LOGIC-->
@@ -200,6 +182,8 @@
             stickyNotes.innerHTML = savedNotes;
           }
           attachDeleteHandlers();
+          stickyTheme();
+          syncUp();
         }
         
         function attachDeleteHandlers() {
@@ -217,6 +201,42 @@
             $('.delete-note').show();
           }
         }
+
+        function stickyTheme() {
+            if (theme === 'dark' ) {
+                $('.sticky-note').css({
+                'background-color': '#333',
+                'color': '#fff',
+                'border-color': '#555'
+                });
+
+                $('#stickyForm').css({
+                'background-color': '#333',
+                'color': '#fff',
+                'border-color': '#555'
+                });
+
+                $('#noteContent').css({
+                'background-color': '#333',
+                'color': '#fff',
+                'border-color': '#555'
+                });
+
+                $('#noteTitle').css({
+                'background-color': '#333',
+                'color': '#fff',
+                'border-color': '#555'
+                });
+
+            }
+            else {
+                $('.sticky-note').css({
+                'background-color': '#ffffff',
+                'color': '#6264a7',
+                'border-color': '#e0e0e0'
+                });
+            }
+        }
         
         stickyForm.addEventListener('submit', function(event) {
           event.preventDefault();
@@ -227,7 +247,7 @@
           const note = document.createElement('div');
           note.className = 'col-md-12';
           note.innerHTML = `
-        						<div class="sticky-note text-break" style="color: #6264a7;">
+        						<div class="sticky-note text-break">
         							<h3>${noteTitle}</h3>
         							<p>${noteContent}</p>
         							<button class="btn btnSticky btn-link delete-note" type="button">
@@ -296,6 +316,7 @@
                 const stickyNotes1 = document.getElementById('stickyNotes');
                 stickyNotes1.innerHTML = response.Data;
                 attachDeleteHandlers();
+                stickyTheme();
         	    localStorage.setItem(stickDBLocal, response.Data);
               }
             },
