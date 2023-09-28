@@ -119,9 +119,8 @@
           var textarea = document.getElementById("noteContent");
           function updateTextareaRows() {
             var minRows = 3;
-            var maxRows = Math.floor((window.innerHeight - textarea.getBoundingClientRect().top - 20) / parseFloat(getComputedStyle(textarea).lineHeight));
             var contentRows = Math.floor(textarea.scrollHeight / parseFloat(getComputedStyle(textarea).lineHeight));
-            var rows = Math.max(minRows, Math.min(maxRows, contentRows));
+            var rows = Math.max(minRows, contentRows);
             textarea.rows = rows;
           }
           updateTextareaRows();
