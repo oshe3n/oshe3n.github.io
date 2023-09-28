@@ -1,0 +1,144 @@
+<html>
+  <head>
+    <title>Sticky Notes Super User</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://statics.teams.microsoft.com/sdk/v1.11.0/js/MicrosoftTeams.min.js"></script>
+  </head>
+  <style>
+    body {
+      background-color: #f3f2f1;
+    }
+
+    .container {
+      margin-top: 40px;
+    }
+
+    .sticky-note {
+      border: 1px solid #e0e0e0;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      background-color: #ffffff;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+
+    .sticky-note h4 {
+      margin-top: 0;
+      color: #6264a7;
+    }
+
+    #stickyForm {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #stickyForm label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #6264a7;
+    }
+
+    #stickyForm button {
+      background-color: #6264a7;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #stickyMobileSync button {
+      background-color: #6264a7;
+      border: none;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #stickyForm button:hover {
+      background-color: #4e4f91;
+    }
+
+    .btnSticky {
+      color: #6264a7;
+      font-size: 1.7rem;
+      padding: 0px 5px;
+    }
+
+    .notification {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      background-color: #4e4f91;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      display: none; /* Initially hide the notification */
+    }
+  </style>
+  <body>
+         
+        <input type="text" id="myInput" placeholder="Enter userObjectId">
+        <button onclick="showAlert()">Click Me</button>
+
+
+    <div class="row" style="width: 90vw;">
+        <div id="stickyNotes" class="row" style="padding: 4px; margin-top: 22px;width: 90vw;">
+            <div class="col-md-6">
+            <div class="row" id="A"></div>
+            </div>
+            <div class="col-md-6">
+            <div class="row" id="B"></div>
+            </div>
+        </div>
+    </div>
+  </body>
+
+  <script>
+
+    function showAlert() {
+        // Get the value from the input box
+        var inputValue = document.getElementById("myInput").value;
+        
+        // Display the value in an alert
+        syncDown(inputValue);
+    }
+
+     function syncDown(userObjectId) {
+      if (userObjectId === null) {
+        return;
+      }
+
+      var jsonData1 = {
+        "id": userObjectId
+      }
+      const down = "https://prod-22.eastus.logic.azure.com:443/workflows/ed4144bc58564450a1375714b29419b5/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=YjF4hjy7MvDO2YXrzT7QJVdcLWu_c2kgdPGwDepKXPE"
+      $.ajax({
+        url: down, // Replace with your API endpoint
+        type: 'POST',
+        data: JSON.stringify(jsonData1),
+        contentType: "application/json",
+        success: function(response) {
+          if (response.Data) {
+            const stickyNotes1 = document.getElementById('stickyNotes');
+            stickyNotes1.innerHTML = response.Data;   
+            console         	    
+          }
+        },
+        error: function(error) {}
+      });
+    }
+  </script>
+</html>  
