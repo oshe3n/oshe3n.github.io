@@ -15,7 +15,6 @@
         
         .container {
           margin-top: 40px;
-          display: none;
         }
         
         .sticky-note {
@@ -84,7 +83,6 @@
 
 <body id="bodie">
         <div class="container">
-                <div class="row notification" id="overlayNotification">SYNCING NOTES ACROSS DEVICES</div>
                 <div class="row notification" id="overlayNotification2">NOTE ADDED</div>
                 <div class="row" id="stickyFormParent">
                         <div class="col-md-12">
@@ -162,6 +160,7 @@
           //alert(userObjectId)
           //console.log("User Principal Name: " + userPrincipalName);
           //console.log(context.hostClientType);
+          loadStickyNotesFromLocalStorage();
           syncDown();
         });
 </script>
@@ -169,12 +168,12 @@
 <script>
         const stickyForm = document.getElementById('stickyForm');
         const stickyNotes = document.getElementById('stickyNotes');
-        const stickDBLocal = "TeamsStickyN"
+        const stickDBLocal = "TeamsStickyN";
         
         function saveStickyNotesToLocalStorage() {
           const notes = stickyNotes.innerHTML;
-          localStorage.setItem(stickDBLocal, notes);
           stickyTheme();
+          localStorage.setItem(stickDBLocal, notes);
           syncUp();
         }
         
@@ -183,8 +182,8 @@
           if (savedNotes) {
             stickyNotes.innerHTML = savedNotes;
           }
-          attachDeleteHandlers();
           stickyTheme();
+          attachDeleteHandlers();
         }
         
         function attachDeleteHandlers() {
@@ -267,8 +266,6 @@
           }, 3000);
         });
         
-        loadStickyNotesFromLocalStorage();
-        
         function syncUp() {
           if (userObjectId === null) {
             return;
@@ -291,14 +288,6 @@
             error: function(jqXHR, textStatus, errorThrown) {}
           });
         }
-        
-        function SyncButton(){
-            $("#overlayNotification").fadeIn();
-            syncDown()
-            setTimeout(function() {
-                $("#overlayNotification").fadeOut();
-            }, 3000);
-        }
         	  
         function syncDown() {
           if (userObjectId === null) {
@@ -317,9 +306,9 @@
               if (response.Data) {
                 const stickyNotes1 = document.getElementById('stickyNotes');
                 stickyNotes1.innerHTML = response.Data;
-                attachDeleteHandlers();
                 stickyTheme();
-        	    localStorage.setItem(stickDBLocal, response.Data);
+                attachDeleteHandlers();
+        	      localStorage.setItem(stickDBLocal, response.Data);
               }
             },
             error: function(error) {syncUp();}
