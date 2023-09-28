@@ -15,6 +15,7 @@
         
         .container {
           margin-top: 40px;
+          display: none;
         }
         
         .sticky-note {
@@ -226,7 +227,7 @@
                 'color': '#fff',
                 'border-color': '#555'
                 });
-
+                $('.container').show();
             }
             else {
                 $('.sticky-note').css({
@@ -234,6 +235,7 @@
                 'color': '#6264a7',
                 'border-color': '#e0e0e0'
                 });
+                $('.container').show();
             }
         }
         
