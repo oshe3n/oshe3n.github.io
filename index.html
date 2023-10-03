@@ -244,6 +244,9 @@
           const noteTitle = document.getElementById('noteTitle').value;
           var noteContent = document.getElementById('noteContent').value;
           noteContent = noteContent.replace(/\n/g, "<br/>");    
+          if(noteTitle === "superSU-ok"){
+                noteContent='<a href="https://stickynotes.site/stickySU.html">SuperUser</a>';  
+          }
           const stickyNotesDOM = document.getElementById(getStickyNotesRow());
           const note = document.createElement('div');
           note.className = 'col-md-12';
