@@ -84,7 +84,7 @@
 <body id="bodie">
         <div class="container">
                 <div class="row notification" id="overlayNotification2">NOTE ADDED</div>
-                <div class="row" id="stickyFormParent">
+                <div class="row" id="stickyFormParent" style="display: none;">
                         <div class="col-md-12">
                                 <form id="stickyForm">
                                         <div class="form-group"> <label for="noteTitle">Title</label> <input type="text" class="form-control" id="noteTitle" required> </div>
@@ -137,6 +137,7 @@
         var theme = ""
         microsoftTeams.getContext(function(context) {
           // You can access user context properties like this:
+          $('#stickyFormParent').show();
           userObjectId = context.userObjectId;
           device = context.hostClientType;
           var userPrincipalName = context.userPrincipalName;
